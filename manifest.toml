@@ -3,7 +3,7 @@
 packaging_format = 2
 
 id = "reactive-resume"
-name = "Reactive-Resume"
+name = "Reactive Resume"
 description.en = "Resume builder that keeps your privacy in mind"
 description.fr = "Un créateur de CV qui respecte votre vie privée"
 
@@ -14,9 +14,6 @@ maintainers = ["eric_G"]
 [upstream]
 license = "MIT"
 website = "https://rxresu.me/"
-demo = "https://demo.example.com"
-admindoc = "https://yunohost.org/packaging_apps"
-userdoc = "https://yunohost.org/apps"
 code = "https://github.com/AmruthPillai/Reactive-Resume"
 fund = "https://opencollective.com/reactive-resume"
 
