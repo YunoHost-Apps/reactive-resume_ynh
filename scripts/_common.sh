@@ -7,16 +7,21 @@
 # Node.js itself is provisioned by the "nodejs" resource in manifest.toml.
 # pnpm is fetched by Corepack at the exact version pinned by upstream in package.json.
 
-# Run pnpm as the app user, keeping every download cache out of $install_dir
-# (so that backups stay lean) in the temporary $build_cache directory
-_pnpm() {
+# Run a command as the app user, keeping every download cache out of $install_dir
+# (so that backups stay lean) in the temporary $build_cache directory.
+# $build_cache/bin holds the pnpm shim, which turbo needs to find in the PATH.
+_as_app_in_build_env() {
     ynh_exec_as_app env \
+        PATH="$build_cache/bin:$PATH" \
         HOME="$build_cache" \
         XDG_CACHE_HOME="$build_cache/cache" \
         COREPACK_HOME="$build_cache/corepack" \
-        npm_config_store_dir="$build_cache/pnpm-store" \
         TURBO_TELEMETRY_DISABLED=1 \
-        corepack pnpm "$@"
+        "$@"
+}
+
+_pnpm() {
+    _as_app_in_build_env pnpm "$@"
 }
 
 # Remove every node_modules folder of the workspace
@@ -30,7 +35,9 @@ _remove_node_modules() {
 # Build the web app and the server, then keep only the runtime dependencies
 _build_reactive_resume() {
     build_cache="$(mktemp --directory)"
-    chown "$app:$app" "$build_cache"
+    mkdir "$build_cache/bin"
+    chown -R "$app:$app" "$build_cache"
+    _as_app_in_build_env corepack enable --install-directory="$build_cache/bin" pnpm
 
     pushd "$install_dir"
         # The mobile app is part of the upstream workspace but is not needed here
