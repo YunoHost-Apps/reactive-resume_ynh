@@ -10,7 +10,7 @@ description.de = "Lebenslauf-Editor, der deine Privatsphäre respektiert"
 
 version = "6.0.4~ynh1"
 
-maintainers = ["eric_G"]
+maintainers = ["Hemmho79"]
 
 [upstream]
 license = "MIT"
