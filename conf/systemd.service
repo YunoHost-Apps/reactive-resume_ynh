@@ -1,19 +1,25 @@
 [Unit]
-Description=do•doc: documentation tool for creativity
-After=network.target
+Description=Reactive Resume: privacy-friendly resume builder
+After=network.target postgresql.service
+Wants=postgresql.service
 
 [Service]
 Type=simple
 User=__APP__
 Group=__APP__
-Environment="PATH=__PATH_WITH_NODEJS__"
-Environment="NODE_ENV=production"
 WorkingDirectory=__INSTALL_DIR__/
-ExecStart=__NODEJS_DIR__/node start
+EnvironmentFile=__INSTALL_DIR__/.env
+# Optional admin overrides (OAuth/OIDC, AI provider...), kept across upgrades and backed up with the data
+EnvironmentFile=-__DATA_DIR__/custom.env
+Environment="PATH=__PATH_WITH_NODEJS__"
+# Database migrations run automatically at startup
+ExecStart=__NODEJS_DIR__/node apps/server/dist/index.mjs
+StandardOutput=append:/var/log/__APP__/__APP__.log
+StandardError=inherit
 Restart=on-failure
+RestartSec=5
+TimeoutStartSec=180
 
-### Depending on specificities of your service/app, you may need to tweak these
-### .. but this should be a good baseline
 # Sandboxing options to harden security
 # Details for these options: https://www.freedesktop.org/software/systemd/man/systemd.exec.html
 NoNewPrivileges=yes
@@ -26,7 +32,9 @@ DevicePolicy=closed
 ProtectClock=yes
 ProtectHostname=yes
 ProtectProc=invisible
-ProtectSystem=full
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=__DATA_DIR__ /var/log/__APP__
 ProtectControlGroups=yes
 ProtectKernelModules=yes
 ProtectKernelTunables=yes

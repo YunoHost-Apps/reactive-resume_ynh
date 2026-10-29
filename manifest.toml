@@ -1,4 +1,4 @@
-#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+#:schema https://raw.githubusercontent.com/YunoHost/apps/main/schemas/manifest.v2.schema.json
 
 packaging_format = 2
 
@@ -6,35 +6,45 @@ id = "reactive-resume"
 name = "Reactive Resume"
 description.en = "Resume builder that keeps your privacy in mind"
 description.fr = "Un créateur de CV qui respecte votre vie privée"
+description.de = "Lebenslauf-Editor, der deine Privatsphäre respektiert"
 
-version = "4.4.0~ynh1"
+version = "6.0.4~ynh1"
 
 maintainers = ["eric_G"]
 
 [upstream]
 license = "MIT"
 website = "https://rxresu.me/"
-code = "https://github.com/AmruthPillai/Reactive-Resume"
+admindoc = "https://docs.rxresu.me/self-hosting/environment-variables"
+userdoc = "https://docs.rxresu.me/"
+code = "https://github.com/reactive-resume/reactive-resume"
 fund = "https://opencollective.com/reactive-resume"
 
 [integration]
-yunohost = ">= 12.0.9"
+# 12.1.39: proxy_params_no_auth keeps the Authorization header (needed for API keys and MCP clients)
+yunohost = ">= 12.1.39"
 helpers_version = "2.1"
-architectures = "all"
+# The web app is built on the server; this is not realistic on 32-bit ARM boards
+architectures = ["amd64", "arm64"]
 multi_instance = true
 
+# Reactive Resume has its own accounts and does not support LDAP or header-based SSO
 ldap = false
 sso = false
 
-disk = "50M"
-ram.build = "50M"
-ram.runtime = "50M"
+disk = "3G"
+ram.build = "4G"
+ram.runtime = "1G"
 
 [install]
     [install.domain]
+    # Reactive Resume cannot be served from a sub-path: no "path" question means it gets a dedicated (sub)domain
     type = "domain"
 
     [install.init_main_permission]
+    # Shared resumes are public links, so the app has to be reachable by visitors
+    help.en = "Reactive Resume has its own user accounts. Keep it public if you want to share resumes with people who don't have an account on this server."
+    help.fr = "Reactive Resume gère ses propres comptes. Laissez-le public si vous souhaitez partager des CV avec des personnes n'ayant pas de compte sur ce serveur."
     type = "group"
     default = "visitors"
 
@@ -43,21 +53,27 @@ ram.runtime = "50M"
     [resources.sources]
 
     [resources.sources.main]
-    url = "https://github.com/AmruthPillai/Reactive-Resume/archive/refs/tags/v4.4.0.tar.gz"
-    sha256 = "e9caf6c34bf9ee21384b685aa22d1db1772a4931f129b81b95cc8e5035fdb475"
+    url = "https://github.com/reactive-resume/reactive-resume/archive/refs/tags/v6.0.4.tar.gz"
+    sha256 = "83bf312016974cdb81698274c471de2b850b361046d28a9d4633c04dc083c5e7"
 
-    # autoupdate.strategy = "latest_github_tag"
+    autoupdate.strategy = "latest_github_release"
 
     [resources.system_user]
+    # Lets the app send account verification and password reset emails through YunoHost's mail stack
+    allow_email = true
 
     [resources.install_dir]
 
     [resources.data_dir]
+    subdirs = ["uploads"]
 
     [resources.permissions]
     main.url = "/"
 
     [resources.ports]
+
+    [resources.nodejs]
+    version = "24"
 
     [resources.apt]
     packages = "postgresql"

@@ -9,7 +9,16 @@ ynh_print_info "Declaring files to be backed up..."
 # BACKUP THE APP MAIN DIR
 #=================================================
 
+# Includes the built app, so that a restore does not need to rebuild (nor network access)
 ynh_backup "$install_dir"
+
+#=================================================
+# BACKUP THE DATA DIR
+#=================================================
+
+# Uploaded pictures and generated files.
+# NB: skipped by the core in the safety backup made before upgrades, the folder is kept in place anyway
+ynh_backup "$data_dir"
 
 #=================================================
 # BACKUP SYSTEM CONFIGURATION
@@ -17,12 +26,18 @@ ynh_backup "$install_dir"
 
 ynh_backup "/etc/nginx/conf.d/$domain.d/$app.conf"
 
-ynh_backup "/etc/systemd/system/$app.service"
+ynh_backup "/etc/logrotate.d/$app"
 
 #=================================================
-# BACKUP THE MYSQL DATABASE
+# BACKUP LOGS
 #=================================================
-ynh_print_info "Backing up the MySQL database..."
+
+ynh_backup "/var/log/$app/"
+
+#=================================================
+# BACKUP THE POSTGRESQL DATABASE
+#=================================================
+ynh_print_info "Backing up the PostgreSQL database..."
 
 ynh_psql_dump_db > db.sql
 
