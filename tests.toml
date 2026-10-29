@@ -1,5 +1,11 @@
-#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/tests.v1.schema.json
+#:schema https://raw.githubusercontent.com/YunoHost/apps/main/schemas/tests.v1.schema.json
 
 test_format = 1.0
 
 [default]
+
+    # The tests to run (install on a full domain, multi-instance, backup/restore,
+    # upgrade, change_url...) are deduced by the CI from the manifest.
+    #
+    # No "test_upgrade_from" commit: the previous v4 package never produced a working
+    # install, and v4 data cannot be upgraded in place anyway (see doc/ADMIN.md).
