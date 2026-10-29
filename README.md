@@ -4,7 +4,7 @@ It shall NOT be edited by hand.
 -->
 
 <h1>
-  <img src="[https://raw.githubusercontent.com/YunoHost/apps/main/logos/reactive-resume.png](https://github.com/reactive-resume/reactive-resume/blob/main/plugins/reactive-resume/assets/logo.png?raw=true)" width="32px" alt="Logo of Reactive Resume">
+  <img src="[https://raw.githubusercontent.com/YunoHost/apps/main/logos/reactive-resume.png]" width="32px" alt="Logo of Reactive Resume">
   Reactive Resume, packaged for YunoHost
 </h1>
 
