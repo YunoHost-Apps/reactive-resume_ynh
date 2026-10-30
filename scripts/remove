@@ -8,12 +8,17 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Removing system configurations related to $app..."
 
+ynh_config_remove_logrotate
+
 if ynh_hide_warnings yunohost service status "$app" >/dev/null; then
     yunohost service remove "$app"
 fi
 ynh_config_remove_systemd
 
 ynh_config_remove_nginx
+
+# Node.js, the database, the system user and the install dir (plus the data dir with --purge)
+# are deprovisioned by the core according to the resources declared in manifest.toml
 
 #=================================================
 # END OF SCRIPT

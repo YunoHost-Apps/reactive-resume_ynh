@@ -1,0 +1,32 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/main/schemas/config_panel.v1.schema.json
+
+version = "1.0"
+
+[main]
+name.en = "Main configuration"
+name.fr = "Configuration principale"
+services = ["__APP__"]
+
+    [main.accounts]
+    name.en = "Accounts"
+    name.fr = "Comptes"
+
+        [main.accounts.disable_signups]
+        ask.en = "Disable sign-ups"
+        ask.fr = "Désactiver les inscriptions"
+        help.en = "Once your own account exists, you probably want to prevent anyone else from creating one. Existing users can still sign in."
+        help.fr = "Une fois votre compte créé, vous voulez probablement empêcher d'autres personnes d'en créer un. Les utilisateurs existants peuvent toujours se connecter."
+        type = "boolean"
+        yes = "true"
+        no = "false"
+        bind = "FLAG_DISABLE_SIGNUPS:__INSTALL_DIR__/.env"
+
+        [main.accounts.disable_email_auth]
+        ask.en = "Disable email and password sign-in"
+        ask.fr = "Désactiver la connexion par e-mail et mot de passe"
+        help.en = "Only enable this if you configured another sign-in provider (OAuth/OpenID Connect) in the custom.env file of the data directory (see the admin documentation), otherwise nobody will be able to log in."
+        help.fr = "N'activez ceci que si vous avez configuré un autre fournisseur de connexion (OAuth/OpenID Connect) dans le fichier custom.env du répertoire de données (voir la documentation d'administration), sinon plus personne ne pourra se connecter."
+        type = "boolean"
+        yes = "true"
+        no = "false"
+        bind = "FLAG_DISABLE_EMAIL_AUTH:__INSTALL_DIR__/.env"

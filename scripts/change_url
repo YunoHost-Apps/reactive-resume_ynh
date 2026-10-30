@@ -3,6 +3,9 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
+# Reactive Resume always lives at the root of a domain: only the domain can change.
+# The new domain is available as $domain, the old one as $old_domain.
+
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
@@ -18,11 +21,19 @@ ynh_script_progression "Updating NGINX web server configuration..."
 ynh_config_change_url_nginx
 
 #=================================================
+# SPECIFIC MODIFICATIONS
+#=================================================
+ynh_script_progression "Updating $app's configuration files..."
+
+# APP_URL (auth callbacks, share links) and the sender address depend on the domain
+ynh_config_add --template="env" --destination="$install_dir/.env"
+
+#=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemctl --service="$app" --action="start"
+ynh_systemctl --service="$app" --action="start" --wait_until="Up and running" --log_path="/var/log/$app/$app.log" --timeout=180
 
 #=================================================
 # END OF SCRIPT
