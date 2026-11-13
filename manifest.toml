@@ -8,7 +8,7 @@ description.en = "Resume builder that keeps your privacy in mind"
 description.fr = "Un créateur de CV qui respecte votre vie privée"
 description.de = "Lebenslauf-Editor, der deine Privatsphäre respektiert"
 
-version = "6.0.4~ynh1"
+version = "6.0.9~ynh1"
 
 maintainers = ["Hemmho79"]
 
@@ -53,8 +53,8 @@ ram.runtime = "1G"
     [resources.sources]
 
     [resources.sources.main]
-    url = "https://github.com/reactive-resume/reactive-resume/archive/refs/tags/v6.0.4.tar.gz"
-    sha256 = "83bf312016974cdb81698274c471de2b850b361046d28a9d4633c04dc083c5e7"
+    url = "https://github.com/reactive-resume/reactive-resume/archive/refs/tags/v6.0.9.tar.gz"
+    sha256 = "e11ebdf1bb5c141947e692428b3907d33376817d3d41a77ef029e5d2d0919e2f"
 
     autoupdate.strategy = "latest_github_release"
 
